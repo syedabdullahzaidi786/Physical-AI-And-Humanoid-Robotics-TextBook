@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>robot_description</name>
+  <version>0.0.1</version>
+  <description>Robot description package (URDF/XACRO) for hackathon humanoid model</description>
+  <maintainer email="you@example.com">Project Team</maintainer>
+  <license>Apache-2.0</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclpy</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>xacro</depend>
+  <depend>gazebo_ros</depend>
+  <exec_depend>ros2launch</exec_depend>
+</package>

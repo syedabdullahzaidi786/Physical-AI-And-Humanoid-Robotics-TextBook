@@ -31,7 +31,15 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+Per Physical AI & Humanoid Robotics Constitution v1.0.0, all features MUST satisfy:
+
+- ✓ **Hardware-Software Integration**: Is simulation/hardware coupling explicit and bidirectional?
+- ✓ **Safety & Compliance**: Are failsafes defined? Pre-deployment validation plan documented?
+- ✓ **Modularity & Reusability**: Is this independently testable? ROS2-composable?
+- ✓ **Transparency & Documentation**: Are design decisions documented in ADRs? APIs clear?
+- ✓ **Open Science** *(if applicable)*: Can research be published? Are datasets/methods shareable?
+- ✓ **Test-First (TDD)**: Will tests be written before implementation?
+- ✓ **Type Hints**: Will Python code include type annotations?
 
 ## Project Structure
 

@@ -1,0 +1,92 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.heroBanner {
+  padding: 4rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 102, 204, 0.9) 0%,
+    rgba(0, 102, 204, 0.7) 50%,
+    rgba(0, 188, 212, 0.6) 100%
+  );
+  color: white;
+}
+
+.heroBanner h1 {
+  font-size: 3.5rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.heroBanner p {
+  color: rgba(255, 255, 255, 0.95);
+  margin: 1rem 0;
+}
+
+.subtitle_extra {
+  font-size: 1.1rem;
+  margin: 1.5rem 0 2rem 0 !important;
+  max-width: 600px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  line-height: 1.8;
+  font-weight: 500;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 3rem 1.5rem;
+  }
+  
+  .heroBanner h1 {
+    font-size: 2.5rem;
+  }
+  
+  .heroBanner p {
+    font-size: 1rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.buttons .button {
+  min-width: 160px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.buttons .button--secondary {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  color: white;
+}
+
+.buttons .button--secondary:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+@media screen and (max-width: 576px) {
+  .buttons {
+    flex-direction: column;
+  }
+  
+  .buttons .button {
+    width: 100%;
+  }
+}

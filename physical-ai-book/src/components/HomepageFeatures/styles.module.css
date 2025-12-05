@@ -1,0 +1,57 @@
+.features {
+  display: flex;
+  align-items: stretch;
+  padding: 4rem 0;
+  width: 100%;
+  background-color: #f9fafb;
+}
+
+.feature {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+.feature:hover {
+  transform: translateY(-4px);
+}
+
+.featureIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  display: block;
+}
+
+.featureContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.featureContent h3 {
+  color: #0066cc;
+  margin-bottom: 0.75rem;
+  margin-top: 0;
+}
+
+.featureContent p {
+  color: #374151;
+  line-height: 1.6;
+  flex: 1;
+}
+
+@media screen and (max-width: 768px) {
+  .features {
+    padding: 2rem 0;
+  }
+  
+  .feature {
+    padding: 1rem;
+  }
+  
+  .featureIcon {
+    font-size: 2.5rem;
+  }
+}

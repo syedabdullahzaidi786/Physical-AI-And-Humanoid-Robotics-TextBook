@@ -1,0 +1,23 @@
+.customSearchBar {
+  background: linear-gradient(135deg, #0066cc 0%, #00bcd4 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.75rem 0;
+}
+
+.searchContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+@media (max-width: 768px) {
+  .customSearchBar {
+    padding: 0.5rem 0;
+  }
+
+  .searchContainer {
+    padding: 0 0.5rem;
+  }
+}

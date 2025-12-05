@@ -5,6 +5,8 @@
 **Status**: Draft  
 **Input**: User description: "$ARGUMENTS"
 
+> **Constitution Alignment**: Every feature MUST address Hardware-Software Integration, Safety & Compliance, Modularity & Reusability, Transparency, and (where applicable) Open Science principles. Features are independently testable, thoroughly documented, and built with test-first (TDD) discipline.
+
 ## User Scenarios & Testing *(mandatory)*
 
 <!--
@@ -65,15 +67,24 @@
 
 [Add more user stories as needed, each with an assigned priority]
 
-### Edge Cases
+### Safety & Compliance *(mandatory for hardware-interfacing features)*
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right edge cases.
--->
+- **Safety Concerns**: What hazards could this feature introduce? (e.g., unexpected motion, loss of control)
+- **Failsafes**: What mechanisms prevent unsafe states? (e.g., torque limits, emergency stops)
+- **Validation**: How will this be tested in simulation before hardware deployment?
+- **Compliance**: Which robotics standards apply? (e.g., ISO/IEC, ROS2 best practices)
+
+### Hardware-Software Integration *(if feature touches hardware or simulation)*
+
+- **Simulation Model**: How is this feature modeled in simulation?
+- **Physical Constraints**: What real-world dynamics must be respected?
+- **Fidelity**: Are simulation results validated against physical behavior?
+
+### Edge Cases
 
 - What happens when [boundary condition]?
 - How does system handle [error scenario]?
+- How does feature behave under hardware latency or failure?
 
 ## Requirements *(mandatory)*
 
@@ -89,6 +100,8 @@
 - **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
 - **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
 - **FR-005**: System MUST [behavior, e.g., "log all security events"]
+- **FR-NF-1** *(if applicable)*: Feature MUST be independently testable and composable as a ROS2 module
+- **FR-NF-2** *(if hardware-related)*: Feature MUST include failsafe mechanisms and pre-deployment validation
 
 *Example of marking unclear requirements:*
 

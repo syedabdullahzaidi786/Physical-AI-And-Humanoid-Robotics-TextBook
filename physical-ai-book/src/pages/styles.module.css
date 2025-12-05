@@ -1,0 +1,176 @@
+.searchPage {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.searchHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.searchHeader h1 {
+  font-size: 2.5rem;
+  color: #0066cc;
+  margin-bottom: 0.5rem;
+  border: none;
+  padding: 0;
+}
+
+.searchHeader p {
+  font-size: 1.1rem;
+  color: #6b7280;
+}
+
+.searchWidget {
+  margin: 2rem 0;
+}
+
+.searchTips {
+  background: #f9fafb;
+  border-left: 4px solid #0066cc;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  margin: 2rem 0;
+}
+
+.searchTips h2 {
+  color: #0066cc;
+  margin-top: 0;
+}
+
+.searchTips ul {
+  list-style: none;
+  padding: 0;
+}
+
+.searchTips li {
+  padding: 0.5rem 0;
+  color: #374151;
+}
+
+.searchTips li:before {
+  content: "✓ ";
+  color: #00bcd4;
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.searchIndex {
+  margin-top: 3rem;
+}
+
+.searchIndex h2 {
+  color: #0066cc;
+  border-bottom: 2px solid #00bcd4;
+  padding-bottom: 0.5rem;
+}
+
+.topicsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.topic {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.topic:hover {
+  box-shadow: 0 4px 8px rgba(0, 102, 204, 0.1);
+  border-color: #0066cc;
+}
+
+.topic strong {
+  display: block;
+  color: #0066cc;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.topic ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.topic li {
+  padding: 0.5rem 0;
+  color: #374151;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.topic li:last-child {
+  border-bottom: none;
+}
+
+/* Dark mode */
+[data-theme='dark'] .searchPage {
+  color: #f3f4f6;
+}
+
+[data-theme='dark'] .searchHeader p {
+  color: #9ca3af;
+}
+
+[data-theme='dark'] .searchTips {
+  background: #1f2937;
+  border-left-color: #3385ff;
+}
+
+[data-theme='dark'] .searchTips h2 {
+  color: #3385ff;
+}
+
+[data-theme='dark'] .searchTips li {
+  color: #e5e7eb;
+}
+
+[data-theme='dark'] .searchTips li:before {
+  color: #4dd0e1;
+}
+
+[data-theme='dark'] .searchIndex h2 {
+  color: #3385ff;
+  border-bottom-color: #4dd0e1;
+}
+
+[data-theme='dark'] .topic {
+  background: #111827;
+  border-color: #374151;
+}
+
+[data-theme='dark'] .topic:hover {
+  border-color: #3385ff;
+  box-shadow: 0 4px 8px rgba(51, 133, 255, 0.1);
+}
+
+[data-theme='dark'] .topic strong {
+  color: #3385ff;
+}
+
+[data-theme='dark'] .topic li {
+  color: #d1d5db;
+  border-bottom-color: #374151;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .searchPage {
+    padding: 1rem;
+  }
+
+  .searchHeader h1 {
+    font-size: 2rem;
+  }
+
+  .topicsGrid {
+    grid-template-columns: 1fr;
+  }
+}

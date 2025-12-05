@@ -1,0 +1,161 @@
+.searchContainer {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.searchBox {
+  position: relative;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background-color: #f9fafb;
+  color: #111827;
+  transition: all 0.2s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #0066cc;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+.searchInput::placeholder {
+  color: #9ca3af;
+}
+
+.searchResults {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 0.5rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 1000;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.resultItem {
+  display: block;
+  padding: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.resultItem:hover {
+  background-color: #f9fafb;
+}
+
+.resultItem:last-child {
+  border-bottom: none;
+}
+
+.resultTitle {
+  font-weight: 600;
+  color: #0066cc;
+  margin-bottom: 0.25rem;
+  font-size: 0.95rem;
+}
+
+.resultExcerpt {
+  font-size: 0.85rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.noResults {
+  padding: 1.5rem;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+/* Dark mode support */
+[data-theme='dark'] .searchInput {
+  background-color: #1f2937;
+  color: #f3f4f6;
+  border-color: #374151;
+}
+
+[data-theme='dark'] .searchInput:focus {
+  border-color: #3385ff;
+  background-color: #111827;
+  box-shadow: 0 0 0 3px rgba(51, 133, 255, 0.1);
+}
+
+[data-theme='dark'] .searchInput::placeholder {
+  color: #6b7280;
+}
+
+[data-theme='dark'] .searchResults {
+  background-color: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme='dark'] .resultItem {
+  border-bottom-color: #374151;
+}
+
+[data-theme='dark'] .resultItem:hover {
+  background-color: #111827;
+}
+
+[data-theme='dark'] .resultTitle {
+  color: #3385ff;
+}
+
+[data-theme='dark'] .resultExcerpt {
+  color: #9ca3af;
+}
+
+[data-theme='dark'] .noResults {
+  color: #6b7280;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .searchContainer {
+    max-width: 100%;
+  }
+
+  .searchResults {
+    max-height: 300px;
+  }
+
+  .resultItem {
+    padding: 0.75rem;
+  }
+
+  .resultTitle {
+    font-size: 0.9rem;
+  }
+
+  .resultExcerpt {
+    font-size: 0.8rem;
+  }
+}

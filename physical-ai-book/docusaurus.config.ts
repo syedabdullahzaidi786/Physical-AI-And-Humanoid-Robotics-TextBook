@@ -99,7 +99,7 @@ const config: Config = {
           position: 'right',
         },
         {
-          href: 'https://github.com/physical-ai-project',
+          href: 'https://github.com/syedabdullahzaidi786/Physical-AI-And-Humanoid-Robotics-TextBook',
           label: 'GitHub',
           position: 'right',
           target: '_blank',
@@ -161,7 +161,7 @@ const config: Config = {
             },
             {
               label: 'GitHub Repository',
-              href: 'https://github.com/physical-ai-project',
+              href: 'https://github.com/syedabdullahzaidi786/Physical-AI-And-Humanoid-Robotics-TextBook',
               target: '_blank',
               rel: 'noopener noreferrer',
             },

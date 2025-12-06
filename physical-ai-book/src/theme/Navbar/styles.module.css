@@ -12,13 +12,18 @@
   justify-content: flex-start;
 }
 
-.authButtonContainer {
-  position: fixed;
-  top: 10px;
-  right: 20px;
-  z-index: 999;
+.navbarWrapper {
+  position: relative;
+}
+
+.authContainer {
+  position: absolute;
+  top: 0;
+  right: 1rem;
+  height: 100%;
   display: flex;
   align-items: center;
+  z-index: 100;
 }
 
 @media (max-width: 768px) {
@@ -30,8 +35,7 @@
     padding: 0 0.5rem;
   }
 
-  .authButtonContainer {
-    top: 8px;
-    right: 10px;
+  .authContainer {
+    right: 0.5rem;
   }
 }

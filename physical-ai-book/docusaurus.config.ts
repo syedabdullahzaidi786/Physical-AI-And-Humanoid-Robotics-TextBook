@@ -93,11 +93,7 @@ const config: Config = {
           position: 'left',
           label: 'Documentation',
         },
-        {
-          to: '/search',
-          label: '🔍 Search',
-          position: 'right',
-        },
+        // Algolia DocSearch will provide the search bar when configured below
         {
           href: 'https://github.com/syedabdullahzaidi786/Physical-AI-And-Humanoid-Robotics-TextBook',
           label: 'GitHub',
@@ -181,24 +177,20 @@ const config: Config = {
       darkTheme: prismThemes.dracula,
     },
     // Algolia DocSearch Configuration
-    // To use DocSearch, you need an Algolia account with a search index
-    // Visit: https://docsearch.algolia.com/ to apply for a free account
-    // Once approved, uncomment and fill in your credentials below:
-    /*
+    // Replace the placeholders below with your Algolia credentials or
+    // set the corresponding environment variables in Vercel:
+    // ALGOLIA_APP_ID, ALGOLIA_API_KEY, ALGOLIA_INDEX_NAME
     algolia: {
-      appId: 'YOUR_APP_ID',
-      apiKey: 'YOUR_SEARCH_API_KEY',
-      indexName: 'physical-ai-robotics',
+      appId: process.env.ALGOLIA_APP_ID || 'YOUR_APP_ID',
+      apiKey: process.env.ALGOLIA_API_KEY || 'YOUR_SEARCH_API_KEY',
+      indexName: process.env.ALGOLIA_INDEX_NAME || 'YOUR_INDEX_NAME',
+      // Optional: enable contextual search across doc versioning/locales
       contextualSearch: true,
-      externalUrlRegex: 'external\\.com|domain\\.com',
-      replaceSearchResultPathname: {
-        from: '/docs/',
-        to: '/',
-      },
-      searchParameters: {},
+      // Optional: provide a dedicated Algolia-powered search page
+      // Docusaurus will generate `/search` when this is set.
       searchPagePath: 'search',
+      // Other options can be added here if needed
     },
-    */
   } satisfies Preset.ThemeConfig,
 };
 

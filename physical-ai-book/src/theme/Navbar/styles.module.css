@@ -12,6 +12,15 @@
   justify-content: flex-start;
 }
 
+.authButtonContainer {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+}
+
 @media (max-width: 768px) {
   .customSearchBar {
     padding: 0.5rem 0;
@@ -19,5 +28,10 @@
 
   .searchContainer {
     padding: 0 0.5rem;
+  }
+
+  .authButtonContainer {
+    top: 8px;
+    right: 10px;
   }
 }

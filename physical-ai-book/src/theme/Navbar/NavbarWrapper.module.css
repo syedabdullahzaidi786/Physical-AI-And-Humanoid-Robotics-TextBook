@@ -1,0 +1,15 @@
+.container :global(.navbar),
+.container :global(.navbar__inner) {
+  /* Reserve space on the right side of the navbar so injected auth
+     button doesn't overlap the search input or other items. */
+  padding-right: 160px;
+}
+
+/* On smaller screens reduce reserved space and allow the hamburger to
+   remain visible. */
+@media (max-width: 768px) {
+  .container :global(.navbar),
+  .container :global(.navbar__inner) {
+    padding-right: 80px;
+  }
+}

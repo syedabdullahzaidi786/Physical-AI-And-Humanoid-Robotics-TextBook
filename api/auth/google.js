@@ -1,29 +1,30 @@
-// Simple redirect to Better Auth authorize endpoint.
-// This is a minimal stub to start the OAuth flow. Replace/extend with
-// Better Auth SDK calls as needed.
+// Better Auth Google OAuth initialization
+// This endpoint returns the Google OAuth URL for the frontend to redirect to
 
 export default function handler(req, res) {
-  // Prefer explicit Google client env vars; fall back to Better Auth client if present
-  const clientId = process.env.GOOGLE_CLIENT_ID || process.env.BETTER_AUTH_CLIENT_ID;
-  const authorizeUrl = process.env.BETTER_AUTH_AUTHORIZE_URL || 'https://api.better-auth.com/oauth/authorize';
-  const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
-  const redirectUri = `${baseUrl}/api/auth/callback/google`;
+  const baseUrl = process.env.BASE_URL || "http://localhost:3000";
+  const clientId = process.env.GOOGLE_CLIENT_ID;
 
   if (!clientId) {
-    res.status(500).send('GOOGLE_CLIENT_ID or BETTER_AUTH_CLIENT_ID not configured');
+    res.status(500).send("GOOGLE_CLIENT_ID not configured");
     return;
   }
 
-  // Include prompt=select_account to force account selection
+  // Construct the Google OAuth URL
   const params = new URLSearchParams({
-    response_type: 'code',
+    response_type: "code",
     client_id: clientId,
-    redirect_uri: redirectUri,
-    scope: 'openid profile email',
-    prompt: 'select_account',
-    state: 'state',
+    redirect_uri: `${baseUrl}/api/auth/callback/google`,
+    scope: "openid profile email",
+    prompt: "select_account",
+    access_type: "offline",
   });
 
-  res.writeHead(302, { Location: `${authorizeUrl}?${params.toString()}` });
-  res.end();
+  const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+
+  // Return JSON response that client can use to redirect
+  res.setHeader("Content-Type", "application/json");
+  res.status(200).json({
+    url: googleAuthUrl,
+  });
 }

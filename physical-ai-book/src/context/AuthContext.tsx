@@ -10,7 +10,7 @@ export interface User {
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
-  signIn: () => void;
+  signIn: () => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -24,10 +24,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch('/api/auth/me');
+        const response = await fetch('/api/auth/get-session', {
+          credentials: 'include', // Important: include cookies
+        });
         if (response.ok) {
-          const userData = await response.json();
-          setUser(userData);
+          const data = await response.json();
+          if (data.session && data.session.user) {
+            setUser({
+              id: data.session.user.id,
+              email: data.session.user.email,
+              name: data.session.user.name,
+              image: data.session.user.image,
+            });
+          }
         }
       } catch (error) {
         console.error('Failed to check auth:', error);
@@ -39,14 +48,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     checkAuth();
   }, []);
 
-  const signIn = () => {
-    // Redirect to Google OAuth flow
-    window.location.href = '/api/auth/google';
+  const signIn = async () => {
+    try {
+      // Get the OAuth URL from the endpoint
+      const response = await fetch('/api/auth/google');
+      const data = await response.json();
+      
+      if (data.url) {
+        // Redirect to Google OAuth
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error('Failed to initiate sign-in:', error);
+    }
   };
 
   const signOut = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' });
+      await fetch('/api/auth/sign-out', {
+        method: 'POST',
+        credentials: 'include',
+      });
       setUser(null);
       window.location.href = '/';
     } catch (error) {

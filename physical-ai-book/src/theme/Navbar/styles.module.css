@@ -12,20 +12,6 @@
   justify-content: flex-start;
 }
 
-.navbarWrapper {
-  position: relative;
-}
-
-.authContainer {
-  position: absolute;
-  top: 0;
-  right: 1rem;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  z-index: 100;
-}
-
 @media (max-width: 768px) {
   .customSearchBar {
     padding: 0.5rem 0;
@@ -33,9 +19,5 @@
 
   .searchContainer {
     padding: 0 0.5rem;
-  }
-
-  .authContainer {
-    right: 0.5rem;
   }
 }

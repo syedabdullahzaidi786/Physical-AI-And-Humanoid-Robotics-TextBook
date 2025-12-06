@@ -24,12 +24,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        console.log('[AUTH] checkAuth() - checking for existing session');
         const response = await fetch('/api/auth/get-session', {
           credentials: 'include', // Important: include cookies
         });
+        console.log('[AUTH] /api/auth/get-session response:', response.status);
+        
         if (response.ok) {
           const data = await response.json();
+          console.log('[AUTH] Session data received:', !!data.session?.user);
           if (data.session && data.session.user) {
+            console.log('[AUTH] User restored:', data.session.user.email);
             setUser({
               id: data.session.user.id,
               email: data.session.user.email,
@@ -37,10 +42,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               image: data.session.user.image,
             });
           }
+        } else {
+          console.log('[AUTH] No active session');
         }
       } catch (error) {
-        console.error('Failed to check auth:', error);
+        console.error('[AUTH] checkAuth error:', error);
       } finally {
+        console.log('[AUTH] Auth check complete - isLoading set to false');
         setIsLoading(false);
       }
     };
@@ -50,16 +58,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signIn = async () => {
     try {
+      console.log('[AUTH] signIn() called - fetching OAuth URL');
       // Get the OAuth URL from the endpoint
       const response = await fetch('/api/auth/google');
+      console.log('[AUTH] /api/auth/google response:', response.status);
+      
+      if (!response.ok) {
+        const errText = await response.text();
+        console.error('[AUTH] Failed to get OAuth URL:', errText);
+        return;
+      }
+      
       const data = await response.json();
+      console.log('[AUTH] OAuth URL received:', !!data.url);
       
       if (data.url) {
+        console.log('[AUTH] Redirecting to Google OAuth...');
         // Redirect to Google OAuth
         window.location.href = data.url;
+      } else {
+        console.error('[AUTH] No URL in response:', data);
       }
     } catch (error) {
-      console.error('Failed to initiate sign-in:', error);
+      console.error('[AUTH] Failed to initiate sign-in:', error);
     }
   };
 

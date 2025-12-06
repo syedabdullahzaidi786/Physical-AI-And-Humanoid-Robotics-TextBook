@@ -2,8 +2,12 @@
 export default async function handler(req, res) {
   const { code, state } = req.query || {};
 
+  console.log('[OAUTH] /api/auth/callback/google - received callback');
+  console.log('[OAUTH] /api/auth/callback/google - code present:', !!code);
+
   if (!code) {
-    return res.status(400).send('Missing authorization code');
+    console.error('[OAUTH] Missing authorization code in callback');
+    return res.status(400).json({ error: 'Missing authorization code' });
   }
 
   try {
@@ -12,9 +16,12 @@ export default async function handler(req, res) {
     const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
     const redirectUri = `${baseUrl}/api/auth/callback/google`;
 
+    console.log('[OAUTH] /api/auth/callback/google - credentials check');
+    console.log('[OAUTH] clientId present:', !!clientId, 'clientSecret present:', !!clientSecret);
+
     if (!clientId || !clientSecret) {
-      console.error('Missing Google OAuth credentials');
-      return res.status(500).send('OAuth credentials not configured');
+      console.error('[OAUTH] Missing Google OAuth credentials');
+      return res.status(500).json({ error: 'OAuth credentials not configured' });
     }
 
     // Step 1: Exchange authorization code for tokens
@@ -32,17 +39,21 @@ export default async function handler(req, res) {
 
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.text();
-      console.error('Token exchange failed:', errorData);
-      return res.status(500).send('Failed to exchange authorization code for tokens');
+      console.error('[OAUTH] Token exchange failed:', errorData);
+      return res.status(500).json({ error: 'Failed to exchange authorization code for tokens', details: errorData });
     }
+
+    console.log('[OAUTH] Token exchange successful');
 
     const tokenData = await tokenResponse.json();
     const { access_token, id_token } = tokenData;
 
     if (!access_token) {
-      console.error('No access token received');
-      return res.status(500).send('Failed to obtain access token');
+      console.error('[OAUTH] No access token received');
+      return res.status(500).json({ error: 'Failed to obtain access token' });
     }
+
+    console.log('[OAUTH] Access token obtained');
 
     // Step 2: Fetch user info from Google
     const userResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
@@ -50,9 +61,12 @@ export default async function handler(req, res) {
     });
 
     if (!userResponse.ok) {
-      console.error('Failed to fetch user info from Google');
-      return res.status(500).send('Failed to fetch user information');
+      const errText = await userResponse.text();
+      console.error('[OAUTH] Failed to fetch user info from Google:', errText);
+      return res.status(500).json({ error: 'Failed to fetch user information', details: errText });
     }
+
+    console.log('[OAUTH] User info fetched from Google');
 
     const userData = await userResponse.json();
 
@@ -66,17 +80,21 @@ export default async function handler(req, res) {
 
     const sessionCookie = Buffer.from(JSON.stringify(sessionData)).toString('base64');
     
+    console.log('[OAUTH] Session cookie created for user:', sessionData.email);
+    
     // Set the session cookie (7 days expiry)
     res.setHeader(
       'Set-Cookie',
       `session=${sessionCookie}; Path=/; HttpOnly; Max-Age=604800; SameSite=Lax`
     );
 
+    console.log('[OAUTH] /api/auth/callback/google - redirecting to /dashboard');
+    
     // Step 4: Redirect to dashboard or home
     res.writeHead(302, { Location: '/dashboard' });
     res.end();
   } catch (error) {
-    console.error('OAuth callback error:', error);
-    return res.status(500).send(`Authentication failed: ${error.message}`);
+    console.error('[OAUTH] OAuth callback error:', error);
+    return res.status(500).json({ error: 'Authentication failed', details: error.message });
   }
 }

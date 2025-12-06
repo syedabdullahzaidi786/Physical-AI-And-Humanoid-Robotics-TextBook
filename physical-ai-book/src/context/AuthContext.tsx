@@ -12,6 +12,7 @@ interface AuthContextType {
   isLoading: boolean;
   signIn: () => Promise<void>;
   signOut: () => Promise<void>;
+  initializeGoogleOAuth: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -58,7 +59,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signIn = async () => {
     try {
-      console.log('[AUTH] signIn() called - fetching OAuth URL');
+      console.log('[AUTH] signIn() called - redirecting to /signin page');
+      // Redirect to sign-in page where user can click "Sign In With Google"
+      window.location.href = '/signin';
+    } catch (error) {
+      console.error('[AUTH] Failed to redirect to sign-in:', error);
+    }
+  };
+
+  const signOut = async () => {
+    try {
+      await fetch('/api/auth/sign-out', {
+        method: 'POST',
+        credentials: 'include',
+      });
+      setUser(null);
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Failed to sign out:', error);
+    }
+  };
+
+  const initializeGoogleOAuth = async () => {
+    try {
+      console.log('[AUTH] initializeGoogleOAuth() called - fetching OAuth URL');
       // Get the OAuth URL from the endpoint
       const response = await fetch('/api/auth/google');
       console.log('[AUTH] /api/auth/google response:', response.status);
@@ -80,25 +104,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.error('[AUTH] No URL in response:', data);
       }
     } catch (error) {
-      console.error('[AUTH] Failed to initiate sign-in:', error);
-    }
-  };
-
-  const signOut = async () => {
-    try {
-      await fetch('/api/auth/sign-out', {
-        method: 'POST',
-        credentials: 'include',
-      });
-      setUser(null);
-      window.location.href = '/';
-    } catch (error) {
-      console.error('Failed to sign out:', error);
+      console.error('[AUTH] Failed to initiate Google OAuth:', error);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, isLoading, signIn, signOut, initializeGoogleOAuth }}>
       {children}
     </AuthContext.Provider>
   );

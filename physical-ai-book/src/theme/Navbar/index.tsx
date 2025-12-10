@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '@theme-original/Navbar';
 import NavbarAuthItem from '@site/src/components/NavbarAuthItem';
+import LanguageSwitcher from '@site/src/components/LanguageSwitcher';
 import styles from './NavbarWrapper.module.css';
 import type NavbarType from '@theme/Navbar';
 
@@ -13,7 +14,7 @@ export default function NavbarWrapper(props: NavbarProps): React.ReactElement {
     <div className={styles.container} style={{ position: 'relative' }}>
       <Navbar {...props} />
 
-      {/* Right-aligned auth item: vertically centered within the navbar */}
+      {/* Right-aligned navbar items: language switcher and auth */}
       <div
         style={{
           position: 'absolute',
@@ -23,9 +24,11 @@ export default function NavbarWrapper(props: NavbarProps): React.ReactElement {
           zIndex: 999,
           display: 'flex',
           alignItems: 'center',
+          gap: '10px',
         }}
         aria-hidden={false}
       >
+        <LanguageSwitcher />
         <NavbarAuthItem />
       </div>
     </div>

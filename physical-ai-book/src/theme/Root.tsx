@@ -5,6 +5,11 @@ import { TranslationProvider } from '@site/src/context/TranslationContext';
 import Chatbot from '@site/src/components/Chatbot';
 
 export default function Root({children}: {children: React.ReactNode}) {
+  // Get chatbot API URL from environment or use default
+  const chatbotApiUrl = typeof window !== 'undefined' 
+    ? (window as any).__DOCUSAURUS_API_URL || 'http://localhost:8000'
+    : 'http://localhost:8000';
+
   return (
     <>
       <Head>
@@ -13,7 +18,7 @@ export default function Root({children}: {children: React.ReactNode}) {
       <AuthProvider>
         <TranslationProvider>
           {children}
-          <Chatbot apiUrl={process.env.REACT_APP_CHATBOT_API_URL || 'http://localhost:8000'} />
+          <Chatbot apiUrl={chatbotApiUrl} />
         </TranslationProvider>
       </AuthProvider>
     </>

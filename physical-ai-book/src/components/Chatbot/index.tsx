@@ -13,14 +13,71 @@ interface ChatbotProps {
   apiUrl?: string;
 }
 
-export default function Chatbot({ apiUrl = 'http://localhost:8000' }: ChatbotProps): React.ReactElement {
+export default function Chatbot({ apiUrl }: ChatbotProps): React.ReactElement {
   const { translateSync } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [apiStatus, setApiStatus] = useState<'unknown' | 'checking' | 'ready' | 'unavailable'>('unknown');
+  const [finalApiUrl, setFinalApiUrl] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Initialize API URL and check health
+  useEffect(() => {
+    const initializeApi = async () => {
+      // Determine API URL
+      let url = apiUrl;
+      
+      // If no URL provided, try to auto-detect
+      if (!url) {
+        if (typeof window !== 'undefined') {
+          // For production: use the same domain
+          const protocol = window.location.protocol;
+          const hostname = window.location.hostname;
+          
+          // Try production URL first (same domain)
+          url = `${protocol}//${hostname}`;
+          
+          // For Vercel deployments, append /api
+          if (hostname.includes('vercel.app') || hostname.includes('herokuapp.com')) {
+            url = `${protocol}//${hostname}`;
+          }
+        }
+      }
+      
+      // Default fallback
+      if (!url) {
+        url = 'http://localhost:8000';
+      }
+      
+      setFinalApiUrl(url);
+      
+      // Check API health
+      setApiStatus('checking');
+      try {
+        const response = await fetch(`${url}/api/health`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        
+        if (response.ok) {
+          setApiStatus('ready');
+          setError(null);
+        } else {
+          setApiStatus('unavailable');
+          setError('Chatbot API is unavailable. Please try again later.');
+        }
+      } catch (err) {
+        setApiStatus('unavailable');
+        setError('Cannot connect to chatbot API. Please check if the service is running.');
+        console.error('[CHATBOT] Health check failed:', err);
+      }
+    };
+    
+    initializeApi();
+  }, [apiUrl]);
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -46,6 +103,11 @@ export default function Chatbot({ apiUrl = 'http://localhost:8000' }: ChatbotPro
     e.preventDefault();
 
     if (!input.trim()) return;
+    
+    if (apiStatus !== 'ready') {
+      setError('Chatbot API is not available. Please try again later.');
+      return;
+    }
 
     // Add user message
     const userMessage: Message = {
@@ -62,7 +124,7 @@ export default function Chatbot({ apiUrl = 'http://localhost:8000' }: ChatbotPro
 
     try {
       // Send to chatbot API
-      const response = await fetch(`${apiUrl}/api/chat`, {
+      const response = await fetch(`${finalApiUrl}/api/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -77,7 +139,7 @@ export default function Chatbot({ apiUrl = 'http://localhost:8000' }: ChatbotPro
       });
 
       if (!response.ok) {
-        throw new Error(`API error: ${response.statusText}`);
+        throw new Error(`API error: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -92,12 +154,13 @@ export default function Chatbot({ apiUrl = 'http://localhost:8000' }: ChatbotPro
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Unknown error occurred';
+      console.error('[CHATBOT] Error:', errorMsg);
       setError(errorMsg);
 
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: `I encountered an error: ${errorMsg}. Please check if the chatbot API is running.`,
+        content: `⚠️ Error: ${errorMsg}\n\nThe chatbot API may not be running. If you're on a hosted site, the backend needs to be deployed separately.`,
         timestamp: new Date(),
       };
 
@@ -203,26 +266,33 @@ export default function Chatbot({ apiUrl = 'http://localhost:8000' }: ChatbotPro
           <form className={styles.inputForm} onSubmit={handleSendMessage}>
             <input
               type="text"
-              placeholder={translateSync('Ask about AI, robotics, and more...')}
+              placeholder={apiStatus === 'ready' ? translateSync('Ask about AI, robotics, and more...') : 'API unavailable...'}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              disabled={isLoading}
+              disabled={isLoading || apiStatus !== 'ready'}
               className={styles.input}
               aria-label="Chat message input"
             />
             <button
               type="submit"
-              disabled={isLoading || !input.trim()}
+              disabled={isLoading || !input.trim() || apiStatus !== 'ready'}
               className={styles.sendBtn}
               aria-label="Send message"
+              title={apiStatus !== 'ready' ? 'Chatbot API is unavailable' : 'Send message'}
             >
-              {isLoading ? '⏳' : '📤'}
+              {isLoading ? '⏳' : apiStatus === 'ready' ? '📤' : '⚠️'}
             </button>
           </form>
 
-          {/* Status */}
-          <div className={styles.footer}>
-            <small>Powered by Gemini 2.0 Flash + RAG</small>
+          {/* Status Indicator */}
+          <div className={styles.statusBar}>
+            <span className={`${styles.statusIndicator} ${styles[`status-${apiStatus}`]}`}></span>
+            <small>
+              {apiStatus === 'ready' && '✅ API Connected'}
+              {apiStatus === 'checking' && '🔄 Checking API...'}
+              {apiStatus === 'unavailable' && '❌ API Unavailable'}
+              {apiStatus === 'unknown' && '⏳ Initializing...'}
+            </small>
           </div>
         </div>
       )}

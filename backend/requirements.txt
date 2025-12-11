@@ -3,3 +3,8 @@ trafilatura
 qdrant-client
 cohere
 python-dotenv
+google-generativeai
+fastapi
+uvicorn
+pydantic
+python-multipart

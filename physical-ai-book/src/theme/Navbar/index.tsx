@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from '@theme-original/Navbar';
 import NavbarAuthItem from '@site/src/components/NavbarAuthItem';
-import LanguageSwitcher from '@site/src/components/LanguageSwitcher';
+
 import styles from './NavbarWrapper.module.css';
 import type NavbarType from '@theme/Navbar';
 
@@ -28,7 +28,7 @@ export default function NavbarWrapper(props: NavbarProps): React.ReactElement {
         }}
         aria-hidden={false}
       >
-        <LanguageSwitcher />
+
         <NavbarAuthItem />
       </div>
     </div>

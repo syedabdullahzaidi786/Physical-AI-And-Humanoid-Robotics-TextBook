@@ -8,7 +8,7 @@ import { useAuth } from '@site/src/context/AuthContext';
 import { useEffect } from 'react';
 
 export function SignInPage() {
-  const { user, isLoading, initializeGoogleOAuth } = useAuth();
+  const { user, isLoading, signIn } = useAuth();
 
   // If user is already logged in, redirect to dashboard
   useEffect(() => {
@@ -44,7 +44,7 @@ export function SignInPage() {
   const handleGoogleSignIn = async () => {
     try {
       console.log('[SIGNIN PAGE] Google Sign In button clicked');
-      await initializeGoogleOAuth();
+      await signIn();
     } catch (error) {
       console.error('[SIGNIN PAGE] Sign in failed:', error);
     }

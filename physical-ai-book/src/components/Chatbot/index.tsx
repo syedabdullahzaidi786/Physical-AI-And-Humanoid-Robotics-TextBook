@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useTranslation } from '@site/src/context/TranslationContext';
 import styles from './Chatbot.module.css';
 
 interface Message {
@@ -14,7 +13,6 @@ interface ChatbotProps {
 }
 
 export default function Chatbot({ apiUrl }: ChatbotProps): React.ReactElement {
-  const { translateSync } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -24,60 +22,51 @@ export default function Chatbot({ apiUrl }: ChatbotProps): React.ReactElement {
   const [finalApiUrl, setFinalApiUrl] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const checkApiHealth = async (url: string) => {
+    setApiStatus('checking');
+    try {
+      const response = await fetch(`${url}/api/health`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (response.ok) {
+        setApiStatus('ready');
+        setError(null);
+      } else {
+        setApiStatus('unavailable');
+        setError('Chatbot API is unavailable. Please try again later.');
+      }
+    } catch (err) {
+      setApiStatus('unavailable');
+      setError('Cannot connect to chatbot API. Please check if the service is running.');
+      console.error('[CHATBOT] Health check failed:', err);
+    }
+  };
+
   // Initialize API URL and check health
   useEffect(() => {
     const initializeApi = async () => {
       // Determine API URL
       let url = apiUrl;
-      
-      // If no URL provided, try to auto-detect
-      if (!url) {
-        if (typeof window !== 'undefined') {
-          // For production: use the same domain
-          const protocol = window.location.protocol;
-          const hostname = window.location.hostname;
-          
-          // Try production URL first (same domain)
-          url = `${protocol}//${hostname}`;
-          
-          // For Vercel deployments, append /api
-          if (hostname.includes('vercel.app') || hostname.includes('herokuapp.com')) {
-            url = `${protocol}//${hostname}`;
-          }
-        }
-      }
-      
-      // Default fallback
+
+      // Default fallback if no URL provided
       if (!url) {
         url = 'http://localhost:8000';
       }
-      
+
       setFinalApiUrl(url);
-      
-      // Check API health
-      setApiStatus('checking');
-      try {
-        const response = await fetch(`${url}/api/health`, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        });
-        
-        if (response.ok) {
-          setApiStatus('ready');
-          setError(null);
-        } else {
-          setApiStatus('unavailable');
-          setError('Chatbot API is unavailable. Please try again later.');
-        }
-      } catch (err) {
-        setApiStatus('unavailable');
-        setError('Cannot connect to chatbot API. Please check if the service is running.');
-        console.error('[CHATBOT] Health check failed:', err);
-      }
+      checkApiHealth(url);
     };
-    
+
     initializeApi();
   }, [apiUrl]);
+
+  const handleRetryConnection = () => {
+    if (finalApiUrl) {
+      checkApiHealth(finalApiUrl);
+    }
+  };
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -90,9 +79,9 @@ export default function Chatbot({ apiUrl }: ChatbotProps): React.ReactElement {
       const welcomeMessage: Message = {
         id: '0',
         role: 'assistant',
-        content: translateSync('Welcome') + ' to the Physical AI & Robotics Chatbot! ' +
-                 'I can help you with questions about humanoid robotics, AI, and more. ' +
-                 'What would you like to know?',
+        content: 'Welcome' + ' to the Physical AI & Robotics Chatbot! ' +
+          'I can help you with questions about humanoid robotics, AI, and more. ' +
+          'What would you like to know?',
         timestamp: new Date(),
       };
       setMessages([welcomeMessage]);
@@ -103,7 +92,7 @@ export default function Chatbot({ apiUrl }: ChatbotProps): React.ReactElement {
     e.preventDefault();
 
     if (!input.trim()) return;
-    
+
     if (apiStatus !== 'ready') {
       setError('Chatbot API is not available. Please try again later.');
       return;
@@ -201,7 +190,7 @@ export default function Chatbot({ apiUrl }: ChatbotProps): React.ReactElement {
         <div className={styles.chatWindow}>
           {/* Header */}
           <div className={styles.chatHeader}>
-            <h3>{translateSync('Physical AI Chatbot')}</h3>
+            <h3>Physical AI Chatbot</h3>
             <div className={styles.headerActions}>
               <button
                 className={styles.clearBtn}
@@ -266,7 +255,7 @@ export default function Chatbot({ apiUrl }: ChatbotProps): React.ReactElement {
           <form className={styles.inputForm} onSubmit={handleSendMessage}>
             <input
               type="text"
-              placeholder={apiStatus === 'ready' ? translateSync('Ask about AI, robotics, and more...') : 'API unavailable...'}
+              placeholder={apiStatus === 'ready' ? 'Ask about AI, robotics, and more...' : 'API unavailable...'}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               disabled={isLoading || apiStatus !== 'ready'}
@@ -290,7 +279,25 @@ export default function Chatbot({ apiUrl }: ChatbotProps): React.ReactElement {
             <small>
               {apiStatus === 'ready' && '✅ API Connected'}
               {apiStatus === 'checking' && '🔄 Checking API...'}
-              {apiStatus === 'unavailable' && '❌ API Unavailable'}
+              {apiStatus === 'unavailable' && (
+                <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  ❌ API Unavailable
+                  <button
+                    onClick={handleRetryConnection}
+                    style={{
+                      background: 'none',
+                      border: '1px solid #ccc',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      fontSize: '10px',
+                      padding: '2px 6px',
+                      marginLeft: '5px'
+                    }}
+                  >
+                    Retry
+                  </button>
+                </span>
+              )}
               {apiStatus === 'unknown' && '⏳ Initializing...'}
             </small>
           </div>

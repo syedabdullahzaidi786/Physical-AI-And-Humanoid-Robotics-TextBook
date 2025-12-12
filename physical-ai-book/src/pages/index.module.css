@@ -4,89 +4,177 @@
  */
 
 .heroBanner {
-  padding: 4rem 2rem;
-  text-align: center;
+  padding: 6rem 2rem;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 102, 204, 0.9) 0%,
-    rgba(0, 102, 204, 0.7) 50%,
-    rgba(0, 188, 212, 0.6) 100%
-  );
+  /* Dark background with Blue Glow */
+  background: radial-gradient(circle at 50% 30%, rgba(0, 102, 204, 0.25) 0%, rgba(0, 0, 0, 0) 70%), #050505;
   color: white;
+  min-height: 800px;
+  display: flex;
+  align-items: center;
+  text-align: center !important;
+}
+
+.heroContainer {
+  display: flex;
+  flex-direction: column;
+  /* Stack vertically */
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  z-index: 1;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 800px;
+  text-align: center !important;
+  animation: slideUp 1s ease-out;
+}
+
+.heroImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+  animation: fadeIn 1.5s ease-out;
+}
+
+.floatingImage {
+  max-width: 300px;
+  /* Smaller, focused image like reference */
+  height: auto;
+  filter: drop-shadow(0 0 30px rgba(0, 102, 204, 0.4));
+  animation: float 6s ease-in-out infinite;
 }
 
 .heroBanner h1 {
-  font-size: 3.5rem;
+  font-size: 4.5rem;
   font-weight: 900;
   margin-bottom: 1rem;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: white;
+  text-align: center;
+}
+
+.highlight {
+  color: var(--ifm-color-primary-light);
+  /* Blue accent */
+  display: block;
+  margin-top: 0.5rem;
+  text-shadow: 0 0 20px rgba(0, 102, 204, 0.5);
 }
 
 .heroBanner p {
-  color: rgba(255, 255, 255, 0.95);
+  color: rgba(255, 255, 255, 0.7);
   margin: 1rem 0;
+  font-size: 1.25rem;
+  font-weight: 400;
+  text-align: center;
+  max-width: 600px;
+  line-height: 1.6;
 }
 
 .subtitle_extra {
-  font-size: 1.1rem;
-  margin: 1.5rem 0 2rem 0 !important;
-  max-width: 600px;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  line-height: 1.8;
-  font-weight: 500;
-}
-
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 3rem 1.5rem;
-  }
-  
-  .heroBanner h1 {
-    font-size: 2.5rem;
-  }
-  
-  .heroBanner p {
-    font-size: 1rem;
-  }
+  font-size: 1.1rem !important;
+  margin: 1rem auto 3rem auto !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  max-width: 500px;
 }
 
 .buttons {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 1rem;
 }
 
 .buttons .button {
-  min-width: 160px;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  border-radius: 0.5rem;
+  padding: 1rem 3rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
   transition: all 0.3s ease;
+  text-transform: none;
+  letter-spacing: 0.5px;
 }
 
+/* Connect Dapp Button Style */
 .buttons .button--secondary {
-  background-color: rgba(255, 255, 255, 0.2);
-  border: 2px solid white;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
+  backdrop-filter: blur(10px);
 }
 
 .buttons .button--secondary:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: white;
+  color: black;
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  border-color: white;
 }
 
-@media screen and (max-width: 576px) {
-  .buttons {
-    flex-direction: column;
+/* Animations */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
   }
-  
-  .buttons .button {
-    width: 100%;
+
+  50% {
+    transform: translateY(-15px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .heroBanner {
+    padding: 4rem 1.5rem;
+    min-height: auto;
+  }
+
+  .heroBanner h1 {
+    font-size: 2.5rem;
+  }
+
+  .floatingImage {
+    max-width: 200px;
   }
 }

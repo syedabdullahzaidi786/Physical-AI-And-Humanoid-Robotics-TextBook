@@ -1,0 +1,209 @@
+openapi: 3.0.0
+info:
+  title: Integrated RAG Chatbot API
+  description: API for the Embedded RAG Chatbot that answers questions based on book content or user-selected text
+  version: 1.0.0
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+  - url: https://staging-api.example.com/v1
+    description: Staging server
+
+paths:
+  /auth/login:
+    post:
+      summary: User login
+      description: Authenticate user and return JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Successful authentication
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: JWT access token
+                  token_type:
+                    type: string
+                    default: bearer
+        '401':
+          description: Invalid credentials
+
+  /chat/query:
+    post:
+      summary: Submit a question to the chatbot
+      description: Submit a question to be answered based on book content or selected text
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                question:
+                  type: string
+                  description: The question to be answered
+                  example: "What are the main themes of this book?"
+                mode:
+                  type: string
+                  enum: [full-book-rag, selected-text]
+                  default: full-book-rag
+                  description: The mode to use for answering
+                selected_text:
+                  type: string
+                  description: Text selected by the user (required if mode is selected-text)
+              required:
+                - question
+              oneOf:
+                - properties:
+                    mode:
+                      const: full-book-rag
+                  required: []
+                - properties:
+                    mode:
+                      const: selected-text
+                    selected_text:
+                      type: string
+                      minLength: 1
+                  required:
+                    - selected_text
+      responses:
+        '200':
+          description: Successful response from the chatbot
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  answer:
+                    type: string
+                    description: The chatbot's answer
+                  metadata:
+                    type: object
+                    properties:
+                      source_chunks:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            chunk_id:
+                              type: string
+                              description: ID of the content chunk
+                            chapter:
+                              type: string
+                              description: Chapter from the source
+                            section:
+                              type: string
+                              description: Section from the source
+                            page:
+                              type: integer
+                              description: Page number from the source
+                      processing_time:
+                        type: number
+                        description: Time taken to process the query in seconds
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Unauthorized access
+        '422':
+          description: Unprocessable entity - question cannot be answered from provided context
+
+  /documents/upload:
+    post:
+      summary: Upload a document for processing
+      description: Upload a book document to be processed for RAG
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                title:
+                  type: string
+                author:
+                  type: string
+      responses:
+        '200':
+          description: Document successfully uploaded and processing started
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  document_id:
+                    type: string
+                    description: ID of the uploaded document
+                  status:
+                    type: string
+                    description: Processing status
+        '401':
+          description: Unauthorized access
+        '413':
+          description: File too large
+
+  /documents/status/{document_id}:
+    get:
+      summary: Get document processing status
+      description: Check the status of document processing
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: document_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Document processing status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [processing, completed, failed]
+                  progress:
+                    type: number
+                    description: Processing progress from 0 to 1
+                  total_chunks:
+                    type: integer
+                    description: Number of content chunks created
+        '401':
+          description: Unauthorized access
+        '404':
+          description: Document not found
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

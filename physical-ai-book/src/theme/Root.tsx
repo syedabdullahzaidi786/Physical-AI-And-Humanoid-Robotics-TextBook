@@ -3,9 +3,9 @@ import Head from '@docusaurus/Head';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { AuthProvider } from '@site/src/context/AuthContext';
 
-import Chatbot from '@site/src/components/Chatbot';
+import Chatbot from '@site/src/components/ChatbotComponent';
 
-export default function Root({ children }: { children: React.ReactNode }) {
+function DocusaurusRoot({ children }: { children: React.ReactNode }) {
   const { siteConfig } = useDocusaurusContext();
 
   // Get chatbot API URL from environment (via customFields) or use default
@@ -23,3 +23,5 @@ export default function Root({ children }: { children: React.ReactNode }) {
     </>
   );
 }
+
+export default DocusaurusRoot;

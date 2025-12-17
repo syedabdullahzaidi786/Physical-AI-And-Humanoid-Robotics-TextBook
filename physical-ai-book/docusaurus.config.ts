@@ -37,7 +37,7 @@ const config: Config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'fr', 'ur', 'ar'],
+    locales: ['en','ur'],
   },
 
   presets: [
@@ -96,7 +96,7 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Documentation',
+          label: 'Textbook',
         },
         {
           type: 'localeDropdown',
@@ -120,7 +120,7 @@ const config: Config = {
           items: [
             {
               label: 'Introduction',
-              to: '/docs/intro',
+              to: '/docs/introduction',
             },
             {
               label: 'ROS 2 Fundamentals',

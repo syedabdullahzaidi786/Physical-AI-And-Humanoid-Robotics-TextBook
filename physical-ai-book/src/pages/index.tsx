@@ -1,23 +1,24 @@
-import type { ReactNode } from 'react';
-import clsx from 'clsx';
-import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
-import Heading from '@theme/Heading';
+import type { ReactNode } from "react";
+import clsx from "clsx";
+import Link from "@docusaurus/Link";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import Layout from "@theme/Layout";
+import HomepageFeatures from "@site/src/components/HomepageFeatures";
+import Heading from "@theme/Heading";
+import ChatbotComponent from "@site/src/components/ChatbotComponent";
 
-import styles from './index.module.css';
+import styles from "./index.module.css";
 
-import useBaseUrl from '@docusaurus/useBaseUrl';
+import useBaseUrl from "@docusaurus/useBaseUrl";
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <div className={clsx('container', styles.heroContainer)}>
+    <header className={clsx("hero hero--primary", styles.heroBanner)}>
+      <div className={clsx("container", styles.heroContainer)}>
         <div className={styles.heroImage}>
           <img
-            src={useBaseUrl('/img/hero-1.png')}
+            src={useBaseUrl("/img/hero-1.png")}
             alt="Physical AI & Humanoid Robotics"
             className={styles.floatingImage}
           />
@@ -29,12 +30,15 @@ function HomepageHeader() {
           </Heading>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
           <p className={styles.subtitle_extra}>
-            Learn how to build intelligent humanoid robots for K-12 education using ROS 2, Gazebo simulation, NVIDIA Isaac, and vision-language models.
+            Learn how to build intelligent humanoid robots for K-12 education
+            using ROS 2, Gazebo simulation, NVIDIA Isaac, and vision-language
+            models.
           </p>
           <div className={styles.buttons}>
             <Link
               className="button button--secondary button--lg"
-              to="/docs/introduction">
+              to="/docs/introduction"
+            >
               Connect Dapp
             </Link>
           </div>
@@ -49,11 +53,13 @@ export default function Home(): ReactNode {
   return (
     <Layout
       title={`${siteConfig.title} - Educational AI & Robotics`}
-      description="A comprehensive guide to physical AI and humanoid robotics in K-12 educational settings">
+      description="A comprehensive guide to physical AI and humanoid robotics in K-12 educational settings"
+    >
       <HomepageHeader />
       <main>
         <HomepageFeatures />
       </main>
+      <ChatbotComponent />
     </Layout>
   );
 }

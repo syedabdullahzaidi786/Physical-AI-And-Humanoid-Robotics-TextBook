@@ -12,7 +12,7 @@ export default function AuthButton(): React.ReactElement {
 
   if (!user) {
     return (
-      <button className={styles.authButton} onClick={signIn}>
+      <button className={styles.authButton} onClick={signIn} title="Sign in with SSO">
         🔐 Sign In
       </button>
     );

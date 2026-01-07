@@ -163,7 +163,9 @@ export default function ChatbotComponent({
     <div className="chatbot-container">
       <div className={clsx("chatbot-window", { open: isOpen })}>
         <div className="chatbot-header">
-          <span style={{ fontWeight: "bold" }}>Physical AI assistant</span>
+          <span style={{ fontWeight: "bold" }}>
+            Physical AI & Humanoid Assistant
+          </span>
           <button
             onClick={toggleChat}
             style={{

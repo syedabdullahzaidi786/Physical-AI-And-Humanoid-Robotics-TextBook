@@ -31,13 +31,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signIn = async () => {
     try {
-      console.log('[AUTH] Initiating Google Sign In...');
-      await authClient.signIn.social({
-        provider: 'google',
-        callbackURL: '/dashboard',
-      });
+      console.log('[AUTH] Redirecting to SSO Login Page...');
+      const ssoUrl = "https://ar-devs-sso.vercel.app/";
+      const callbackUrl = encodeURIComponent(window.location.origin + '/dashboard');
+      // Redirecting to the base URL with callbackURL parameter
+      window.location.href = `${ssoUrl}?callbackURL=${callbackUrl}`;
     } catch (error) {
-      console.error('[AUTH] Sign in failed:', error);
+      console.error('[AUTH] Redirect failed:', error);
     }
   };
 

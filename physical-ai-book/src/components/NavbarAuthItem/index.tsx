@@ -18,10 +18,10 @@ export default function NavbarAuthItem(): React.ReactElement {
   if (!user) {
     return (
       <div className={styles.container}>
-        <button 
+        <button
           className={styles.signInBtn}
           onClick={() => signIn()}
-          title="Sign in with Google"
+          title="Sign in with SSO"
         >
           <span className={styles.icon}>🔐</span>
           <span className={styles.text}>Sign In</span>
